@@ -13,6 +13,7 @@ fn main() {
             .args(&["submodule", "update", "--init"])
             .status()
             .expect("Failed to update submodules.");
+        println!("cargo: Updated submodules for ibverbs.");
     } else {
         assert!(
             Path::new("vendor/rdma-core").is_dir(),
@@ -20,7 +21,13 @@ fn main() {
         );
     }
 
-    // build vendor/rdma-core
+    // DEBUG: Print out environment variables
+    for (key, value) in env::vars() {
+        println!("cargo: Found environment variable: {}={}", key, value);
+    }
+
+    // Build vendor/rdma-core
+    // TODO: Set up environment variables for needed building rdma-core
     Command::new("bash")
         .current_dir("vendor/rdma-core/")
         .args(&["build.sh"])
