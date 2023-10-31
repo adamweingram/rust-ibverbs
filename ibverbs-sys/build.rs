@@ -1,6 +1,7 @@
 use std::env;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::process::Stdio;
 
 fn main() {
     println!("cargo:include=vendor/rdma-core/build/include");
@@ -26,11 +27,28 @@ fn main() {
         println!("cargo: Found environment variable: {}={}", key, value);
     }
 
+    // Print info about pkg-config
+    Command::new("bash")
+        .args(&["-c", "pkg-config --version"])
+        .stdout(Stdio::piped())
+        .stdout(Stdio::piped())
+        .status()
+        .expect("Failed to run pkg-config --version");
+
+    Command::new("bash")
+        .args(&["-c", "pkg-config --list-all", "|", "grep", "libnl"])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .status()
+        .expect("Failed to run pkg-config --list-all | grep libnl");
+
     // Build vendor/rdma-core
     // TODO: Set up environment variables for needed building rdma-core
     Command::new("bash")
         .current_dir("vendor/rdma-core/")
         .args(&["build.sh"])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
         .status()
         .expect("Failed to build vendor/rdma-core using build.sh");
 
