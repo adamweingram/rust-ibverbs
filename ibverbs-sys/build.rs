@@ -27,20 +27,20 @@ fn main() {
     //     println!("cargo: Found environment variable: {}={}", key, value);
     // }
 
-    // // Print info about pkg-config
-    // Command::new("bash")
-    //     .args(&["-c", "pkg-config --version"])
-    //     .stdout(Stdio::piped())
-    //     .stdout(Stdio::piped())
-    //     .status()
-    //     .expect("Failed to run pkg-config --version");
+    // Print info about pkg-config
+    Command::new("bash")
+        .args(&["-c", "pkg-config --version"])
+        .stdout(Stdio::piped())
+        .stdout(Stdio::piped())
+        .status()
+        .expect("Failed to run pkg-config --version");
 
-    // Command::new("bash")
-    //     .args(&["-c", "pkg-config --list-all", "|", "grep", "libnl"])
-    //     .stdout(Stdio::piped())
-    //     .stderr(Stdio::piped())
-    //     .status()
-    //     .expect("Failed to run pkg-config --list-all | grep libnl");
+    Command::new("bash")
+        .args(&["-c", "pkg-config --list-all", "|", "grep", "libnl"])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .status()
+        .expect("Failed to run pkg-config --list-all | grep libnl");
 
     // Build vendor/rdma-core
     // TODO: Set up environment variables for needed building rdma-core
